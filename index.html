@@ -1,0 +1,423 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>.filter, .map & .reduce</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/simple.css">
+
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-transition="convex">
+					<a href="https://revealjs.com">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width: 128px;">
+							<g transform="matrix(2,0,0,2,0,0)">
+								<g>
+									<path d="M23.68,10.48a3.13,3.13,0,0,0-2-1.6,2.86,2.86,0,0,0-2.56.51A3.49,3.49,0,0,0,18,13.18c.41,1.07,1.48,1.93,3.39,1.74a.39.39,0,0,0-.05-.77c-1.35,0-2.1-.54-2.33-1.31A2.32,2.32,0,0,1,20,10.4a1.73,1.73,0,0,1,1.46-.31,2.1,2.1,0,0,1,1.34.9,2.2,2.2,0,0,1,.33,1.42,2.61,2.61,0,0,1-.54,1.4.33.33,0,1,0,.42.52,3.41,3.41,0,0,0,1-1.79A3.19,3.19,0,0,0,23.68,10.48Z" style="fill: #3397fa;fill-rule: evenodd"></path>
+									<path d="M12.38,9a2.86,2.86,0,0,0-2.56.51,3.3,3.3,0,0,0-1,3.55,2.82,2.82,0,0,0,3,1.92.39.39,0,0,0,0-.77A1.94,1.94,0,0,1,9.8,12.7a2.11,2.11,0,0,1,.81-2.23,1.74,1.74,0,0,1,1.47-.3,2,2,0,0,1,1.32.9,2.11,2.11,0,0,1,.34,1.41,2.57,2.57,0,0,1-.54,1.4.33.33,0,0,0,.42.52,3.36,3.36,0,0,0,1-1.78,3.21,3.21,0,0,0-.25-2.07A3.09,3.09,0,0,0,12.38,9Z" style="fill: #000;fill-rule: evenodd"></path>
+									<path d="M3.71,9a2.86,2.86,0,0,0-2.56.5,3.23,3.23,0,0,0-.79,4,2.89,2.89,0,0,0,3.51,1.6.4.4,0,0,0,.27-.47.37.37,0,0,0-.46-.27A2,2,0,0,1,1.34,13a2.08,2.08,0,0,1,.6-2.5,1.75,1.75,0,0,1,1.47-.32,2.11,2.11,0,0,1,1.35.9,2.14,2.14,0,0,1,.35,1.19,2.87,2.87,0,0,1-.32,1.29.34.34,0,0,0,.58.35,3.68,3.68,0,0,0,.57-1.58,3,3,0,0,0-.3-1.73A3.07,3.07,0,0,0,3.71,9Z" style="fill: #3397fa;fill-rule: evenodd"></path>
+								</g>
+							</g>
+						</svg>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width: 128px;">
+							<g transform="matrix(2,0,0,2,0,0)">
+								<g>
+									<path d="M3,6.65a4.2,4.2,0,0,0,1,.76,12.32,12.32,0,0,0,3.6,1.05A21.56,21.56,0,0,0,14,8.65a13.4,13.4,0,0,0,6-2.3,6.06,6.06,0,0,0,1.1-1,2.11,2.11,0,0,0,.58-2.21c-.39-.94-1.79-1.88-4.51-2.63a.35.35,0,0,0-.43.24.35.35,0,0,0,.24.43c2.34.71,3.61,1.44,3.92,2.26s-.33,1.39-1.44,2.14a12.42,12.42,0,0,1-5.64,2A20.87,20.87,0,0,1,7.79,7.3a11.42,11.42,0,0,1-3.26-.91A2.26,2.26,0,0,1,3.3,5a1.49,1.49,0,0,1,.19-1.07A2.7,2.7,0,0,1,4.34,3,14,14,0,0,1,9.46,1,25.46,25.46,0,0,1,15.07.7a.3.3,0,0,0,.32-.28A.31.31,0,0,0,15.1.09,24,24,0,0,0,8.18.46,13.88,13.88,0,0,0,3.8,2.16,3.75,3.75,0,0,0,2.39,3.74a2.5,2.5,0,0,0-.18,1.53A4.39,4.39,0,0,0,3,6.65Z" style="fill: #3397fa"></path>
+									<path d="M21,6.33a9.7,9.7,0,0,1-.89,3.15A7.63,7.63,0,0,1,17,13.06a19.14,19.14,0,0,1-2.38.89,1,1,0,0,0-.74.9c0,1.12,0,2.6,0,3.83a8.91,8.91,0,0,1-.13,1.53,2.48,2.48,0,0,1-.65.87,7.74,7.74,0,0,1-2.16,1.68c-.19-1.29-.13-5.23-.19-6.93a6.87,6.87,0,0,0-.07-.82.7.7,0,0,0-.16-.33,3.73,3.73,0,0,0-1-.71c-.46-.22-1-.43-1.56-.63a9.1,9.1,0,0,1-3.57-3A4.92,4.92,0,0,1,3.18,8.2a1.92,1.92,0,0,0-.27-.78c-.15-.12-.41-.25-.48.11a5.8,5.8,0,0,0,1.24,3.22,10.16,10.16,0,0,0,3.87,3.47A13.82,13.82,0,0,1,9,14.86a3.11,3.11,0,0,1,.6.39c0,.08.05.22.05.37,0,1.05,0,3.35,0,5.17a13.9,13.9,0,0,0,.2,2.62.8.8,0,0,0,.74.59,2.07,2.07,0,0,0,1-.28,10.07,10.07,0,0,0,2.43-2,3.55,3.55,0,0,0,.82-1.32A11.37,11.37,0,0,0,15,18.7c0-4.35-.89-2.76,2.49-4.81a8.51,8.51,0,0,0,3.44-4.08,9.81,9.81,0,0,0,.95-3.88C21.84,5.48,21.17,5.64,21,6.33Z" style="fill: #000"></path>
+								</g>
+							</g>
+						</svg>
+					</a>
+					<h3>Understanding .filter, .map, & .reduce</h3>
+					<p>
+						<small>Instructor: <a href="http://github.com/Svjard">Marc Fisher</a></small>
+					</p>
+				</section>
+				<section data-transition="convex">
+					<h4>Arrays in Javascript</h4>
+					<div><small>Let's briefly review arrays ...</small></div>
+					<ul style="font-size: 24px;">
+						<li class="fragment fade-in">Built-in data type in Javascript to provide an ordered way of storing a list of things</li>
+						<li class="fragment fade-in">Let's review a few examples...
+							<pre style="font-size: 14px;">
+								<code data-noescape>
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const christmasWishList = [
+	"PS5", "Macbook Pro", "iPhone12+"
+];
+const coinFlipAsHeads = [true, true, false];
+const userAccounts = [
+	{ name: "Fred Davies", email: "fred.davies@gmail.com" },
+	{ name: "Josh Samuels", email: "josh.samuels@gmail.com" },
+	{ name: "Katy Barret", email: "katy.barret@gmail.com" },
+];
+const bucketedGrades = [
+	[99.5, 98],
+	[83.5, 83, 82],
+	[79]
+];
+const badProgrammingExample = [null, undefined];
+const mixedBag = [1, "random", null, false, [1, 2, 3]];
+								</code>
+							</pre>
+						</li>
+					</ul>
+				</section>
+				<section data-transition="convex">
+					<h4>Arrays in Javascript</h4>
+					<div><small>Let's review using arrays...</small></div>
+				</section>
+				<section>
+					<section data-transition="convex">
+						<h4>Declaring an array</h4>
+						<div>
+							<pre>
+								<code data-noescape style="font-size: 20px;">
+let myArray = [];
+let ourArray = new Array();
+								</code>
+							</pre>
+						</div>
+					</section>
+					<section data-transition="convex">
+						<h4>Accessing an "element", ie. "thing" in an array</h4>
+						<div>
+							<pre>
+								<code data-noescape style="font-size: 20px;">
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const firstStudentsGrade = classGrades[0];
+console.log(firstStudentsGrade); // 99.5
+let lastStudentsGrade = classGrades[5];
+console.log(lastStudentsGrade); // 79
+lastStudentsGrade = classGrades[-1];
+console.log(lastStudentsGrade); // 79
+								</code>
+							</pre>
+						</div>
+					</section>
+					<section data-transition="convex">
+						<h4>Knowing how many elements are in an array</h4>
+						<div>
+							<pre>
+								<code data-noescape style="font-size: 20px;">
+console.log(classGrades.length); // 6
+								</code>
+							</pre>
+						</div>
+					</section>
+					<section>
+						<div style="font-size: 24px;">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width: 128px;margin-right: 10px;">
+								<g transform="matrix(2,0,0,2,0,0)">
+									<g>
+										<path d="M9.28,17.33a.36.36,0,0,0,.1-.47,1.88,1.88,0,0,0-1.17-1.09,1.11,1.11,0,0,0-.48,0,1.13,1.13,0,0,0-.68.29,1.57,1.57,0,0,0-.49,1.34.3.3,0,0,0,.6.09.76.76,0,0,1,.7-.58,1,1,0,0,1,.94.35A.34.34,0,0,0,9.28,17.33Z" style="fill: #000000;fill-rule: evenodd"></path>
+										<path d="M12.77,17A1.79,1.79,0,0,1,13,17a.62.62,0,0,1,.46.21.34.34,0,1,0,.62-.28,1.38,1.38,0,0,0-1.12-1,1.35,1.35,0,0,0-.4,0,1.4,1.4,0,0,0-.56.17,1.44,1.44,0,0,0-.75,1.07.3.3,0,0,0,.17.39.32.32,0,0,0,.39-.18c.13-.2.37-.21.61-.27Z" style="fill: #000000;fill-rule: evenodd"></path>
+										<path d="M9.3,21.09a1.68,1.68,0,0,0,.87.22,2,2,0,0,0,.85-.19,2.24,2.24,0,0,0,1.19-1.43.34.34,0,0,0-.18-.45.35.35,0,0,0-.45.18,1.47,1.47,0,0,1-1.4.74,1.85,1.85,0,0,1-.42-.06,1.27,1.27,0,0,1-.83-.76.31.31,0,0,0-.36-.23.3.3,0,0,0-.23.36A1.92,1.92,0,0,0,9.3,21.09Z" style="fill: #000000;fill-rule: evenodd"></path>
+										<path d="M17.2,12.8a.3.3,0,0,0-.35.24c-.08.3-.14.6-.22.9,0,0,0,0-.07,0a3.47,3.47,0,0,1-.45.06,1.29,1.29,0,0,1-.39,0c-.65-.13-1-.72-1.54-1a2.16,2.16,0,0,0-.58-.25,2.79,2.79,0,0,0-1.32,0,12,12,0,0,1-2.27.73,2.73,2.73,0,0,1-1.26-.31,6.82,6.82,0,0,0-1.58-.57,2.51,2.51,0,0,0-1.6.23,3,3,0,0,0-.45.28,3.19,3.19,0,0,0-.4.33l-.13.12c0-.4,0-.8,0-1.2a14.5,14.5,0,0,1,0-2.35A1.91,1.91,0,0,1,5.06,8.8a1.1,1.1,0,0,1,.44-.18c.36-.08.76-.1,1-.14L10.17,8a.3.3,0,1,0-.05-.59l-3.69.22a9.62,9.62,0,0,0-1.32.11,1.83,1.83,0,0,0-.68.3A2.83,2.83,0,0,0,3.5,9.76a13.48,13.48,0,0,0-.1,2.56,51.38,51.38,0,0,0,.44,5.25A33.4,33.4,0,0,0,5,22.71a28.31,28.31,0,0,0,3.43,1.07A10,10,0,0,0,9.83,24a9.9,9.9,0,0,0,1.44,0,10.59,10.59,0,0,0,3.31-.75.34.34,0,0,0-.22-.65,11.29,11.29,0,0,1-3.55.3c-.72,0-1.44-.09-2.15-.18a24.18,24.18,0,0,1-3.1-.5,36.17,36.17,0,0,1-.65-3.72c-.14-1.23-.22-2.47-.27-3.71,0-.12,0-.24,0-.36l.1-.11a5.54,5.54,0,0,1,.45-.37l.73-.41a1.65,1.65,0,0,1,1,0,8,8,0,0,1,1.32.63,3.62,3.62,0,0,0,1.78.45,4.06,4.06,0,0,0,1.41-.39,10.69,10.69,0,0,1,1.1-.47,1.88,1.88,0,0,1,.83-.09c.65.11,1,.66,1.61.92a1.84,1.84,0,0,0,.59.17,2.55,2.55,0,0,0,.48,0l.39-.08c-.16.63-.34,1.26-.46,1.9s-.23,1.57-.34,2.35a18,18,0,0,1-.31,2.39,5.75,5.75,0,0,1-.51,1.46.34.34,0,0,0,.59.35,6.9,6.9,0,0,0,.76-1.57,18.39,18.39,0,0,0,.58-2.47c.09-.59.19-1.17.26-1.77.15-1.37.21-2.75.39-4.12A.3.3,0,0,0,17.2,12.8Z" style="fill: #000000;fill-rule: evenodd"></path>
+										<path d="M11.57,3.87a1.11,1.11,0,0,0-.09.4s0,1.24.5,1.2c.2,0,.19,0,.61-1,.05-.13.09-.27.13-.4.29-.86.48-.87.27-1.11-.38-.45-1.21.57-1.22.59A1.39,1.39,0,0,0,11.57,3.87Z" style="fill: #3397fa;fill-rule: evenodd"></path>
+										<path d="M10.56,6.37A.31.31,0,0,0,10.81,6,9.63,9.63,0,0,1,11,4.49c.06-.29.11-.58.18-.86a4.27,4.27,0,0,1,.13-.54,1.62,1.62,0,0,1,.61-.92.35.35,0,0,0,.16-.46.34.34,0,0,0-.45-.16,2.6,2.6,0,0,0-1.49,1.58,3.56,3.56,0,0,0-.22,1.22,5.75,5.75,0,0,0,.29,1.77A.31.31,0,0,0,10.56,6.37Z" style="fill: #3397fa;fill-rule: evenodd"></path>
+										<path d="M17.32,2.58a1.33,1.33,0,0,0,.19.14c1,.57,1,.58,1.2.45.33-.24-.12-.93-.31-1.17a1.31,1.31,0,0,0-.24-.23,1.2,1.2,0,0,0-.3-.15,2.2,2.2,0,0,0-.77-.07.29.29,0,0,0-.38.18.3.3,0,0,0,.18.39A6.17,6.17,0,0,1,17.32,2.58Z" style="fill: #3397fa;fill-rule: evenodd"></path>
+										<path d="M19.79,1.08A2.75,2.75,0,0,0,19.2.54a2.7,2.7,0,0,0-.72-.36A4.35,4.35,0,0,0,16.7,0a.3.3,0,0,0-.32.28.32.32,0,0,0,.29.32,5.12,5.12,0,0,1,1.38.56c.17.09.34.2.5.3A3.56,3.56,0,0,1,20,2.94a.35.35,0,0,0,.45.2.34.34,0,0,0,.19-.44A3.92,3.92,0,0,0,19.79,1.08Z" style="fill: #3397fa;fill-rule: evenodd"></path>
+										<path d="M19.67,5.32a1.44,1.44,0,0,0-.3-.24A1.17,1.17,0,0,0,19,4.94a2.1,2.1,0,0,0-.66,0A2.85,2.85,0,0,0,17.93,4a3.4,3.4,0,0,0-1-.81,2.61,2.61,0,0,0-2.74.06,2.39,2.39,0,0,0-.62.57A2.89,2.89,0,0,0,13,5.6a3.08,3.08,0,0,0,.07.61,4.14,4.14,0,0,0,.26.82s0,0,0,0a3.37,3.37,0,0,0-.38.55,5.12,5.12,0,0,0-.32.85,2.55,2.55,0,0,0-.1.66.51.51,0,0,0,.23.36,2.05,2.05,0,0,0,1,.36,6.44,6.44,0,0,0,1.41-.07l.31-.09a2,2,0,0,0,0,.64,1.57,1.57,0,0,0,.61.89,2.1,2.1,0,0,0,2.5-.18,1.58,1.58,0,0,0,.48-1.22,1.72,1.72,0,0,0-.76-1.24l-.1-.05c1.67-1.11,2-2.21,1.87-2.44A2.64,2.64,0,0,0,19.67,5.32Zm-1.59,5.16a.88.88,0,0,1-1.29.19.67.67,0,0,1-.28-.52.79.79,0,0,1,.18-.54.72.72,0,0,1,.49-.24.94.94,0,0,1,.62.12c.19.12.37.25.41.44A.7.7,0,0,1,18.08,10.48Zm-.24-2.74a8.58,8.58,0,0,1-1.38.54A8.7,8.7,0,0,1,15,8.64a6.66,6.66,0,0,1-1.16.15,2.36,2.36,0,0,1-.38,0c0-.07,0-.13,0-.14a4.64,4.64,0,0,1,.16-.74A2.65,2.65,0,0,1,14,7.22a.3.3,0,0,0-.05-.42h0a4.85,4.85,0,0,1-.09-.55,2.14,2.14,0,0,1,0-.57,2.11,2.11,0,0,1,1-1.47,1.66,1.66,0,0,1,1.65-.14,2.58,2.58,0,0,1,.79.47,2.1,2.1,0,0,1,.47.79.32.32,0,0,0,.29.22c.22.14.37.31.58.45s.26.13.38.2a4.53,4.53,0,0,1,.54.27.35.35,0,0,0-.2.12A4.61,4.61,0,0,1,17.84,7.74Z" style="fill: #000000;fill-rule: evenodd"></path>
+										</g>
+									</g>
+							</svg>
+							<ul>
+								<li class="fragment fade-in">Remember the first element in a Javascript array is at index (i.e. position) 0 not 1</li>
+								<li class="fragment fade-in">Negative indices are allowed in Javascript ... yes Javascript lets you do some crazy things!</li>
+							</ul>
+							<div class="fragment fade-in" style="margin-top: 40px;">
+								Check out <a href="https://jsisweird.com/">https://jsisweird.com/</a> makes even me feel like a n00b
+							</div>
+						</div>
+					</section>
+				</section>
+				<section data-transition="convex">
+					<h4>What arrays actually are in Javascript?</h4>
+					<div style="font-size: 22px;margin-top: 45px;">
+						You may be asking yourself ... `.length` looks a lot like how I learned to access a field in an object right?
+					</div>
+					<div>
+						<pre class="fragment fade-in">
+							<code data-noescape>
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+console.log(typeof classGrades);
+							</code>
+						</pre>
+						<pre class="fragment fade-in">
+							<code data-noescape>"object"</code>
+						</pre>
+					</div>
+					<div class="fragment fade-in" style="font-size: 22px;">
+						(*lightbulb*) Because arrays are actually special objects in javascript, this means they can have fields pointing to values and functions
+					</div>
+					<div class="fragment fade-in" style="font-size: 28px;">
+						<pre>
+							<code data-noescape>
+console.log(classGrades.length); // 6
+console.log(classGrades["length"]); // 6
+console.log(classGrades[0]); // 99.5
+							</code>
+						</pre>
+					</div>
+				</section>
+				<section>
+					<div style="font-size: 25px;margin-top: 15px;font-weight: bold;">
+						So lets fully console.log an array and find out what we see...
+						<p>Quick Demo</p>
+					</div>
+				</section>
+				<section data-transition="convex">
+					<h4>Array's Built-in Methods</h4>
+					<ul>
+						<li>at</li>
+						<li>concat</li>
+						<li style="color: red;">filter</li>
+						<li style="color: red;">map</li>
+						<li style="color: red;">reduce</li>
+						<li>...</li>
+					</ul>					
+					<div class="fragment fade-in" style="font-size: 24px;margin-top: 45px;">
+						<strong>NOTE</strong>: If you are asking what is Prototype exactly, even though it is a fairly deep topic in Javascript, all you really need to know is it is basically a special way Javascript provides as built-in methods.
+					</div>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.filter</u></h4>
+					<ul>
+						<li>It lets us only get the things in the array that meet our criteria</li>
+						<li class="fragment fade-in">Say we want only grades above 85% ...
+							<pre class="fragment fade-in">
+								<code data-noescape>
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const gradesAbove85 = classGrades.filter(function(grade) {
+	return grade > 85;
+});
+console.log(gradesAbove85); // [99.5, 98]
+								</code>
+							</pre>
+						</li>
+					</ul>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.filter</u></h4>
+					<div>
+						Lets understand what is happening in our example.
+					</div>
+				</section>
+				<section>
+					<section><img src="assets/Step1.png" /></section>
+					<section><img src="assets/Step2.png" /></section>
+					<section><img src="assets/Step3.png" /></section>
+					<section><img src="assets/Step4.png" /></section>
+					<section><img src="assets/Step5.png" /></section>
+					<section><img src="assets/Step6.png" /></section>
+					<section><img src="assets/Step7.png" /></section>
+					<section><img src="assets/Step8.png" /></section>
+					<section><img src="assets/Step9.png" /></section>
+					<section><img src="assets/Step10.png" /></section>
+					<section><img src="assets/Step11.png" /></section>
+					<section><img src="assets/Step12.png" /></section>
+					<section><img src="assets/Step13.png" /></section>
+					<section><img src="assets/Step14.png" /></section>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.filter</u></h4>
+					<div>
+						Re-writing without filter helps us see what is happening...
+						<pre class="fragment fade-in">
+							<code data-noescape>
+function isGradeGreaterThan85(grade) {
+	return grade > 85;
+}
+
+const filteredItems = [];
+if (isGradeGreaterThan85(99.5)) { filteredItems.push(99.5); }
+if (isGradeGreaterThan85(98)) { filteredItems.push(98); }
+if (isGradeGreaterThan85(83.5)) { filteredItems.push(83.5); }
+if (isGradeGreaterThan85(83)) { filteredItems.push(83); }
+if (isGradeGreaterThan85(82)) { filteredItems.push(82); }
+if (isGradeGreaterThan85(79)) { filteredItems.push(79); }
+return filteredItems;
+							</code>
+						</pre>
+					</div>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.filter</u></h4>
+					<div>
+						<pre class="fragment fade-in">
+							<code data-noescape>
+function(value, currentIndex, originalArray)
+							</code>
+							<span>The function/callback provides additional parameters if needed.</span>
+						</pre>
+						<pre class="fragment fade-in">
+							<code data-noescape>
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const firstGradeAndGradesAbove85 = classGrades
+	.filter((value, currentIndex, originalArray) => {
+		return currentIndex > 0 && value > 85;
+	});
+							</code>
+							<span>When the function keyword is missing and you see => instead, it is a fat array function. It is basically the same but with "scope" differences.</span>
+						</pre>
+					</div>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.map</u></h4>
+					<ul>
+						<li>Lets us return a new array based on the existing arrays data</li>
+						<li class="fragment fade-in">Say we an gave extra credit assignment and everyone in the class completed it so everyone gets 5 additional points ...</li>
+					</ul>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.map</u></h4>
+					<pre class="fragment fade-in" style="font-size:18px;">
+						<code data-noescape>
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const gradesWithExtraCredit = classGrades
+	.map((value, currentIndex, originalArray) => {
+		return value + 5;
+	});
+// [104.5, 103, 88.5, 88, 87, 84]
+						</code>
+					</pre>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.map</u></h4>
+					<div>
+						Once again we are <b>not</b> modifying the original array, rather returning a new array of same length.
+					</div>
+					<pre>
+						<code data-noescape>
+function(value, currentIndex, originalArray)
+						</code>
+						<span>The function/callback provides additional parameters if needed again.</span>
+					</pre>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.map</u></h4>
+					<div>Lets explore one more example which is more common to the use of .map</div>
+					<pre class="fragment fade-in">
+						<code data-noescape>
+//  We need to get the emails of everyone who opened our
+// marketing campaign email to send them a follow-up
+const successfulMarketingCampaignData = [
+  { email: "john.smith@gmail.com", openedOn: "2021-11-05" },
+  { email: "carry.johnson@gmail.com", openedOn: "2021-11-08" },
+  { email: "sam.axe@gmail.com", openedOn: "2021-11-08" }
+];
+const emailAddresses = classGrades.map(function(user) {
+	return user.email;
+});
+console.log(emailAddresses);
+// ["john.smith@gmail.com", "carry.johnson@gmail.com", "sam.axe@gmail.com"]
+						</code>
+					</pre>
+					<div class="fragment fade-in">
+						BONUS: What if the function doesn't return anything?
+					</div>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.reduce</u></h4>
+					<ul>
+						<li>
+							Reduce is different in that it will return only one "thing"
+						</li>
+						<li>
+							Can return a number, string, object, array, literally any type in Javascript
+						</li>
+					</ul>
+					<pre class="fragment fade-in">
+						<code data-noescape>
+const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const totalScore = classGrades
+	.reduce((previousValue, currentValue) => {
+		return previousValue + currentValue;
+	}, 0);
+console.log("Class Average", totalScore / classGrades.length);
+						</code>
+					</pre>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.reduce</u></h4>
+					<div>Breaking this down into its parts...</div>
+					<img src="assets/Breakdown.png" />
+				</section>
+				<section data-transition="convex">
+					<h4><u>.reduce</u></h4>
+					<div>
+						Lets understand what is happening visually...
+					</div>
+				</section>
+				<section>
+					<section><img src="assets/Reduce1.png" /></section>
+					<section><img src="assets/Reduce2.png" /></section>
+					<section><img src="assets/Reduce3.png" /></section>
+					<section><img src="assets/Reduce4.png" /></section>
+					<section><img src="assets/Reduce5.png" /></section>
+					<section><img src="assets/Reduce6.png" /></section>
+					<section><img src="assets/Reduce7.png" /></section>
+					<section><img src="assets/Reduce8.png" /></section>
+					<section><img src="assets/Reduce9.png" /></section>
+					<section><img src="assets/Reduce10.png" /></section>
+					<section><img src="assets/Reduce11.png" /></section>
+					<section><img src="assets/Reduce12.png" /></section>
+					<section><img src="assets/Reduce13.png" /></section>
+					<section><img src="assets/Reduce14.png" /></section>
+					<section><img src="assets/Reduce15.png" /></section>
+					<section><img src="assets/Reduce16.png" /></section>
+					<section><img src="assets/Reduce17.png" /></section>
+					<section><img src="assets/Reduce18.png" /></section>
+				</section>
+				<section data-transition="convex">
+					<h4><u>.reduce</u></h4>
+					<div style="font-size: 20px;">
+						Working with reduce to return an array...Say we want to add 5 points of extra
+						credit to everyone and get back the equivalent letter grade.
+					</div>
+					<pre class="fragment fade-in">
+						<code data-noescape style="font-size: 20px;width: 105%;">const classGrades = [99.5, 98, 83.5, 83, 82, 79];
+const scoresAsLetterGrades = classGrades
+	.reduce((previousValue, currentValue) => {
+		const updatedScore = currentValue + 5;
+		if (updatedScore >= 90) { previousValue.push("A"); }
+		else if (updatedScore >= 80) { previousValue.push("B"); }
+		else if (updatedScore >= 70) { previousValue.push("C"); }
+		else if (updatedScore >= 60) { previousValue.push("D"); }
+		else { previousValue.push("F"); }
+	}, []);
+console.log("Class Scores", scoresAsLetterGrades);
+// ["A","A","B","B","B","B"]
+						</code>
+					</pre>
+				</section>
+				<section data-transition="convex">
+					Lets have some fun and practice with a real example
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/zoom/zoom.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				slideNumber: true,
+				pdfSeparateFragments: false,
+
+				plugins: [ RevealZoom, RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
