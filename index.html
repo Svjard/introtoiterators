@@ -314,9 +314,10 @@ const successfulMarketingCampaignData = [
   { email: "carry.johnson@gmail.com", openedOn: "2021-11-08" },
   { email: "sam.axe@gmail.com", openedOn: "2021-11-08" }
 ];
-const emailAddresses = successfulMarketingCampaignData.map(function(user) {
-	return user.email;
-});
+const emailAddresses = successfulMarketingCampaignData
+	.map(function(user) {
+		return user.email;
+	});
 console.log(emailAddresses);
 // ["john.smith@gmail.com", "carry.johnson@gmail.com", "sam.axe@gmail.com"]
 						</code>
