@@ -263,10 +263,10 @@ function(value, currentIndex, originalArray)
 const classGrades = [99.5, 98, 83.5, 83, 82, 79];
 const firstGradeAndGradesAbove85 = classGrades
 	.filter((value, currentIndex, originalArray) => {
-		return currentIndex > 0 && value > 85;
+		return currentIndex == 0 || value > 85;
 	});
 							</code>
-							<span>When the function keyword is missing and you see => instead, it is a fat array function. It is basically the same but with "scope" differences.</span>
+							<span>When the function keyword is missing and you see => instead, it is a fat arrow function. It is basically the same but with "scope" differences.</span>
 						</pre>
 					</div>
 				</section>
@@ -314,7 +314,7 @@ const successfulMarketingCampaignData = [
   { email: "carry.johnson@gmail.com", openedOn: "2021-11-08" },
   { email: "sam.axe@gmail.com", openedOn: "2021-11-08" }
 ];
-const emailAddresses = classGrades.map(function(user) {
+const emailAddresses = successfulMarketingCampaignData.map(function(user) {
 	return user.email;
 });
 console.log(emailAddresses);
